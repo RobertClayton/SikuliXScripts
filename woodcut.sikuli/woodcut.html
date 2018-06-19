@@ -1,0 +1,199 @@
+
+<html>
+   <head>
+      <style type="text/css">
+         .sikuli-code {
+            font-size: 20px;
+            font-family: "Osaka-mono", Monospace;
+            line-height: 1.5em;
+            display:table-cell;
+            white-space: pre-wrap;       /* css-3 */
+            white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+            white-space: -pre-wrap;      /* Opera 4-6 */
+            white-space: -o-pre-wrap;    /* Opera 7 */
+            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+            width: 99%;   /* remove horizontal scroll-bar when viewing in IE7 */
+         }
+         .sikuli-code img {
+            vertical-align: middle;
+            margin: 2px;
+            border: 1px solid #ccc;
+            padding: 2px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-box-shadow: 1px 1px 1px gray;
+            -webkit-box-shadow: 1px 1px 2px gray;
+         }
+         .kw {
+            color: blue;
+         }
+         .skw {
+            color: rgb(63, 127, 127);
+         }
+         .str {
+            color: rgb(128, 0, 0);
+         }
+         .dig {
+            color: rgb(128, 64, 0);
+         }
+         .cmt {
+            color: rgb(200, 0, 200);
+         }
+         h2 {
+            display: inline;
+            font-weight: normal;
+         }
+         .info {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            display: none;
+         }
+         a {
+            color: #9D2900;
+         }
+         body {
+            font-family: "Trebuchet MS", Arial, Sans-Serif;
+         }
+      </style>
+   </head>
+<body>
+<div class="info">
+<h2>woodcut.sikuli</h2> <a href="woodcut.zip">(Download this script)</a>
+</div>
+<pre class="sikuli-code">
+<span class="kw">from</span> time <span class="kw">import</span> gmtime, strftime
+
+Settings.MoveMouseDelay = <span class="dig">0</span>
+running = True
+packEmpty = True
+treeStillUp = True
+atBank = True
+
+<span class="kw">def</span> logThis(message):
+    switchApp(<span class="str">"TextEdit"</span>)
+    paste(<span class="str">"\n"</span>)
+    <span class="kw">if</span> message != <span class="str">"\n"</span>:
+        paste(<span class="str">"{0}: {1}"</span>.format(strftime(<span class="str">"%H:%M:%S"</span>, gmtime()), message))
+    switchApp(<span class="str">"App"</span>)
+
+<span class="kw">def</span> runHotkey(event):
+    logThis(<span class="str">'    global running'</span>)
+    <span class="kw">global</span> running
+    logThis(<span class="str">'    Running = false'</span>)
+    running = False
+
+<span class="kw">def</span> getWindow():
+    <span class="skw">find</span>(<img src="1528758625915.png" />)
+    <span class="skw">click</span>(<img src="1528758625915.png" />)
+
+<span class="kw">def</span> areWeAtBank():
+    logThis(<span class="str">'    global atBank'</span>)
+    <span class="kw">global</span> atBank
+    <span class="kw">if</span>(exists(<img src="1528755597102.png" />)):
+        logThis(<span class="str">'        True'</span>)
+        atBank = True
+    <span class="kw">else</span>:
+        logThis(<span class="str">'        False'</span>)
+        atBank = False
+
+<span class="kw">def</span> fromBank():
+    logThis(<span class="str">'    finding tree'</span>)
+    <span class="skw">wait</span>(<img src="1528755597102.png" />)
+    logThis(<span class="str">'    clicking tree - moving from bank'</span>)
+    <span class="skw">click</span>(Pattern(<img src="1528755597102.png" />).targetOffset(-<span class="dig">387</span>,<span class="dig">259</span>))
+    <span class="skw">doubleClick</span>(Pattern(<img src="1528755597102.png" />).targetOffset(-<span class="dig">387</span>,<span class="dig">259</span>))
+    logThis(<span class="str">'    wait(9)'</span>)
+    <span class="skw">wait</span>(<span class="dig">9</span>)
+
+<span class="kw">def</span> clickTree():
+    logThis(<span class="str">'    finding tree'</span>)
+    <span class="skw">find</span>(Pattern(<img src="1528842326792.png" />).similar(<span class="dig">0.50</span>))
+    <span class="skw">click</span>(Pattern(<img src="1528842326792.png" />).similar(<span class="dig">0.50</span>).targetOffset(<span class="dig">402</span>,<span class="dig">26</span>))
+    <span class="skw">doubleClick</span>(Pattern(<img src="1528842326792.png" />).similar(<span class="dig">0.50</span>).targetOffset(<span class="dig">402</span>,<span class="dig">26</span>))
+    hover(Pattern(<img src="1528842326792.png" />).similar(<span class="dig">0.50</span>).targetOffset(<span class="dig">405</span>,<span class="dig">290</span>))
+    logThis(<span class="str">'    clicking tree'</span>)
+    logThis(<span class="str">'    doubleclick tree'</span>)
+
+<span class="kw">def</span> backpackFull():
+    logThis(<span class="str">'    global packEmpty'</span>)
+    <span class="kw">global</span> packEmpty
+    <span class="kw">if</span>(exists(Pattern(<img src="1528759332914.png" />).similar(<span class="dig">0.98</span>))):
+        logThis(<span class="str">'        False'</span>)
+        packEmpty = False
+    <span class="kw">else</span>:
+        logThis(<span class="str">'        True'</span>)
+        packEmpty = True
+
+<span class="kw">def</span> checkTree():
+    logThis(<span class="str">'    global treeStillUp'</span>)
+    <span class="kw">global</span> treeStillUp
+    <span class="kw">if</span>(exists(Pattern(<img src="1529171340151.png" />).similar(<span class="dig">0.55</span>))):
+        logThis(<span class="str">'        True'</span>)
+        treeStillUp = True
+    <span class="kw">else</span>:
+        logThis(<span class="str">'        False'</span>)
+        treeStillUp = False
+
+<span class="kw">def</span> bankLogs():
+    logThis(<span class="str">'    finding bank'</span>)
+    <span class="skw">find</span>(Pattern(<img src="1528838305119.png" />).similar(<span class="dig">0.58</span>))
+    logThis(<span class="str">'    click bank'</span>)
+    <span class="skw">click</span>(Pattern(<img src="1528838305119.png" />).similar(<span class="dig">0.58</span>).targetOffset(<span class="dig">35</span>,-<span class="dig">42</span>))
+    logThis(<span class="str">'    double click bank'</span>)
+    <span class="skw">doubleClick</span>(Pattern(<img src="1528838305119.png" />).similar(<span class="dig">0.58</span>).targetOffset(<span class="dig">35</span>,-<span class="dig">42</span>))
+    logThis(<span class="str">'    wait(9)'</span>)
+    <span class="skw">wait</span>(<span class="dig">9.0</span>)
+    logThis(<span class="str">'    finding bank tab'</span>)
+    <span class="skw">find</span>(Pattern(<img src="1528759436235.png" />).similar(<span class="dig">0.45</span>))
+    logThis(<span class="str">'    click deposit'</span>)
+    <span class="skw">click</span>(Pattern(<img src="1528759436235.png" />).similar(<span class="dig">0.45</span>).targetOffset(<span class="dig">60</span>,<span class="dig">552</span>))
+    logThis(<span class="str">'    wait(1)'</span>)
+    <span class="skw">wait</span>(<span class="dig">1</span>)
+    logThis(<span class="str">'    click close bank tab'</span>)
+    <span class="skw">click</span>(Pattern(<img src="1528759436235.png" />).similar(<span class="dig">0.45</span>).targetOffset(<span class="dig">165</span>,-<span class="dig">1</span>))
+
+Env.addHotkey(<span class="str">"c"</span>, KeyModifier.CTRL, runHotkey)
+
+switchApp(<span class="str">"App"</span>)
+getWindow()
+<span class="kw">while</span>(running):
+    logThis(<span class="str">'\n'</span>)
+    <span class="kw">if</span>(running):
+        logThis(<span class="str">'Are we at Bank?'</span>)
+        areWeAtBank()
+        logThis(<span class="str">'Back pack full? - 1'</span>)
+        backpackFull()
+    <span class="kw">if</span>(atBank):
+        logThis(<span class="str">'Travelling from bank'</span>)
+        logThis(<span class="str">'Getting window'</span>)
+        getWindow()
+        fromBank()
+    <span class="kw">while</span>(packEmpty <span class="kw">and</span> running):
+        logThis(<span class="str">'\n'</span>)
+        logThis(<span class="str">'While pack empty'</span>)
+        <span class="kw">if</span>(running):
+            logThis(<span class="str">'checking tree'</span>)
+            checkTree()
+        <span class="kw">if</span>(treeStillUp <span class="kw">and</span> running):
+            logThis(<span class="str">'\n'</span>)
+            logThis(<span class="str">'If - Tree is there ...'</span>)
+            logThis(<span class="str">'Click tree'</span>)
+            clickTree()
+            <span class="kw">while</span>(packEmpty <span class="kw">and</span> treeStillUp <span class="kw">and</span> running):
+                logThis(<span class="str">'\n'</span>)
+                logThis(<span class="str">'Currently Cutting ...'</span>)
+                <span class="kw">if</span>(running):
+                    logThis(<span class="str">'Back pack full? - 2'</span>)
+                    backpackFull()
+                    logThis(<span class="str">'checking tree'</span>)
+                    checkTree()
+    <span class="kw">if</span>(running):
+        logThis(<span class="str">'\n'</span>)
+        logThis(<span class="str">'Banking Logs'</span>)
+        logThis(<span class="str">'Getting window'</span>)
+        getWindow()
+        bankLogs()
+</pre>
+</body>
+</html>
